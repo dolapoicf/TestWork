@@ -25,7 +25,7 @@ pipeline {
             }
         }
 
-        stage{'Infrastructure Build'} {
+        stage('Infrastructure Build') {
             steps {
                 echo 'this stage is for infrastructure build'
             }

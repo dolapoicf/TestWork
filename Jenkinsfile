@@ -7,7 +7,7 @@ pipeline {
     }
 
     stages {
-        stage('intialize') {
+        stage('Install sam-cli) {
             steps {
                 sh 'python3 -m venv venv && venv/bin/pip install aws-sam-cli'
                 stash includes: '**/venv/**/*', name: 'venv'
@@ -16,7 +16,9 @@ pipeline {
 
         stage('Build') {
             steps {
-                echo 'this stage is the build stage'
+                unstash 'venv'
+                sh 'venv/bin/sam build'
+                stash includes: '**/.aws-sam/**/*', name: 'aws-sam'
             }
         }
 

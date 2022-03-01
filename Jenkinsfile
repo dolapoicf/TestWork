@@ -22,10 +22,22 @@ pipeline {
             }
         }
 
-        stage('Test') {
-            steps {
-                echo 'this stage is to test'
+        stage('Beta') {
+            environment {
+                STACK_NAME = 'jenkins1-gao'
+                S3_BUCKET = 'sam-jenkins-demo-goa-hhs'
             }
+                steps {
+                    withAWS(credentials: 'Jenkins_GAO, region: 'us-west-1) {
+                        unstash 'venv'
+                        unstash 'aws-sam'
+                        sh 'venv/bin/sam deploy --stack-name $STACK_NAME -t template.yaml --s3-bucket $S3_BUCKET --capabilities CAPABILITY_IAM'
+                        dir ('hello-world') {
+                            sh 'npm ci'
+                            sh 'npm run integ-test'                            
+                        }
+                    }
+                }
         }
 
         stage('Infrastructure Build') {

@@ -28,7 +28,7 @@ pipeline {
                 S3_BUCKET = 'sam-jenkins-demo-goa-hhs'
             }
                 steps {
-                    withAWS(credentials: 'Jenkins_GAO, region: 'us-west-1') {
+                    withAWS(credentials: 'Jenkins_GAO', region: 'us-west-1') {
                         unstash 'venv'
                         unstash 'aws-sam'
                         sh 'venv/bin/sam deploy --stack-name $STACK_NAME -t template.yaml --s3-bucket $S3_BUCKET --capabilities CAPABILITY_IAM'
